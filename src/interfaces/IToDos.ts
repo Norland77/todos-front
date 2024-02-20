@@ -1,10 +1,10 @@
 export interface IToDos {
   id: string,
   name: string,
-  tasks: ITask[]
+  Tasks: ITask[]
 }
 
-interface ITask {
+export interface ITask {
   id: string,
   name: string,
   description: string,
@@ -13,4 +13,15 @@ interface ITask {
   taskId: string,
   listId: string,
   subtasks: ITask[]
+}
+
+export interface ITaskCreate {
+  name: string,
+  description: string,
+  priority: string,
+  status?: string
+}
+
+export interface IListCreate {
+  name: string
 }

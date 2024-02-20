@@ -1,0 +1,80 @@
+.modal {
+  width: 100%;
+  > div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, .4);
+    > div {
+      gap: 10px;
+      border-radius: 5px;
+      padding: 25px;
+      background-color: aliceblue;
+      width: 50%;
+      height: 50%;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      > .body {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        > input {
+          height: 30px;
+          font-size: 18px;
+          padding: 5px;
+        }
+        > textarea {
+          height: 60px;
+          resize: none;
+          font-size: 18px;
+          padding: 5px;
+        }
+        >label {
+          color: black;
+          font-size: 16px;
+          font-weight: bold;
+        }
+        > select {
+          height: 30px;
+          font-size: 16px;
+        }
+        > button {
+          width: 100%;
+          padding: 3px;
+          font-size: 16px;
+          border-radius: 5px;
+          border: none;
+          transition-duration: .3s;
+          cursor: pointer;
+          &:hover {
+            opacity: .8;
+            transition-duration: .3s;
+          }
+        }
+      }
+      > div {
+        display: flex;
+        justify-content: space-between;
+        > div {
+         color: black;
+          font-size: 24px;
+          font-weight: bold;
+        }
+        > .close {
+          width: 25px;
+          height: 25px;
+          border: none;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

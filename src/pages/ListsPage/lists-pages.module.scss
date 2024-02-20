@@ -1,0 +1,39 @@
+.lists {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.body {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  > div {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    > input {
+      height: 30px;
+      width: 25%;
+      font-size: 24px;
+      border: none;
+      border-radius: 5px;
+      padding: 3px;
+    }
+    > button {
+      width: 15%;
+      font-size: 24px;
+      border-radius: 5px;
+      border: none;
+      transition-duration: .3s;
+      cursor: pointer;
+      &:hover {
+        opacity: .8;
+        transition-duration: .3s;
+      }
+    }
+  }
+}

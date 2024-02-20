@@ -1,42 +1,60 @@
-import { useLoaderData } from "react-router-dom";
-import { IToDos } from "../../interfaces/IToDos.ts";
+import {IListCreate, IToDos} from "../../interfaces/IToDos.ts";
+import styles from "./lists-pages.module.scss";
+import TaskList from "../../components/TaskList/TaskList.tsx";
+import {ChangeEvent, useEffect, useState} from "react";
+import {todosLoader} from "../../loaders/todosLoader.ts";
+import axios from "axios";
 
 const ListsPage = () => {
-  const todos = useLoaderData() as IToDos[];
+    const [todos, setTodos] = useState<IToDos[]>([]);
 
-  const renderSubtasks = (task: any) => {
-    if (task.subtasks && task.subtasks.length > 0) {
-      return (
-        <ul>
-          {task.subtasks.map((subtask: any) => (
-            <li key={subtask.id}>
-              {subtask.name}
-              {renderSubtasks(subtask)} {/* Рекурсивный вызов для обработки подзадач */}
-            </li>
-          ))}
-        </ul>
-      );
+    const [formData, setFormData] = useState<IListCreate>({
+        name: ''
+    });
+
+    const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
+        const { name, value } = event.target;
+        setFormData((prevValues) => ({
+            ...prevValues,
+            [name]: value
+        }));
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await todosLoader();
+            setTodos(data);
+        };
+
+        fetchData();
+    }, []);
+
+    const updateTodos = async () => {
+        const data = await todosLoader();
+        setTodos(data);
+    };
+
+    const addList = async () => {
+        await axios.post(`${import.meta.env.VITE_SERVER_URL}/list/create`, {
+            name: formData.name,
+        });
+
+        await updateTodos()
     }
-    return null;
-  };
 
-  return (
-    <div>
-      {todos.map((list) => (
-        <div key={list.id}>
-          <h3>{list.name}</h3>
-          <div>
-            {list.tasks.map((task) => (
-              <div key={task.id}>
-                <p>{task.name}</p>
-                {renderSubtasks(task)} {/* Вызов функции для отображения подзадач */}
-              </div>
-            ))}
-          </div>
+    return (
+        <div className={styles.body}>
+            <div>
+                <input type="text" name={'name'} value={formData.name} onChange={handleChange}/>
+                <button onClick={addList}>Add new list</button>
+            </div>
+            <div className={styles.lists}>
+                {todos.map((list) => (
+                    <TaskList key={list.id} list={list} updateTodos={updateTodos}/>
+                ))}
+            </div>
         </div>
-      ))}
-    </div>
-  );
+    );
 };
 
 export default ListsPage;
