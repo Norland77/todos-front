@@ -40,11 +40,14 @@ const ListsPage = () => {
         });
 
         await updateTodos()
+        setFormData({
+            name: ''
+        })
     }
 
     return (
         <div className={styles.body}>
-            <div>
+            <div className={styles.body_header}>
                 <input type="text" name={'name'} value={formData.name} onChange={handleChange}/>
                 <button onClick={addList}>Add new list</button>
             </div>

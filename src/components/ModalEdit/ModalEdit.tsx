@@ -1,4 +1,3 @@
-
 import styles from "../ModalWindow/modal-windiw.module.scss";
 import {Modal} from "react-bootstrap";
 import {ChangeEvent, useState} from "react";

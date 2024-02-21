@@ -37,8 +37,8 @@ const Task = ({ task, toggleItem, isItemExpanded, renderSubtasks, listId, title,
             <p>{task.description}</p>
             <p>{task.Priority}</p>
             <p>{task.Status}</p>
-            <div>
-                <button onClick={handleShow}>Add Subtask to {task.name}</button>
+            <div className={styles.buttons}>
+                <button onClick={handleShow}>Add Subtask</button>
                 <button onClick={() => deleteTask(task.id)}>Delete Task</button>
                 <button onClick={handleShowEdit}>Edit Task</button>
             </div>
@@ -68,6 +68,7 @@ const Task = ({ task, toggleItem, isItemExpanded, renderSubtasks, listId, title,
                     >
                         {isItemExpanded(task.id) ? "Hide subtasks" : "Show subtasks"}
                     </button>
+
                     {isItemExpanded(task.id) && renderSubtasks(task.subtasks)}
                 </>
             )}

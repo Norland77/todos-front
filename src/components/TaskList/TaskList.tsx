@@ -7,7 +7,7 @@ import axios from "axios";
 
 interface TaskListProps {
     list: IToDos;
-    updateTodos: () => void; // Функция для обновления данных
+    updateTodos: () => void;
 }
 
 const TaskList = ({ list, updateTodos }: TaskListProps) => {
@@ -28,35 +28,16 @@ const TaskList = ({ list, updateTodos }: TaskListProps) => {
         return expandedItems.includes(itemId);
     };
 
-    const renderSubtasks = (tasks: ITask[]) => {
-        if (!tasks || tasks.length === 0) return null;
-
-        return (
-            <div className={styles.test}>
-                {tasks.map((task) => (
-                    <Task
-                        task={task}
-                        toggleItem={toggleItem}
-                        isItemExpanded={isItemExpanded}
-                        renderSubtasks={renderSubtasks}
-                        listId={list.id}
-                        title={list.name}
-                        updateTodos={updateTodos}
-                    />
-                ))}
-            </div>
-        );
-    };
-
     const renderTasks = (tasks: ITask[]) => {
         return (
             <div>
                 {tasks.map((task) => (
                     <Task
+                        key={task.id}
                         task={task}
                         toggleItem={toggleItem}
                         isItemExpanded={isItemExpanded}
-                        renderSubtasks={renderSubtasks}
+                        renderSubtasks={renderTasks}
                         listId={list.id}
                         title={list.name}
                         updateTodos={updateTodos}
@@ -74,8 +55,8 @@ const TaskList = ({ list, updateTodos }: TaskListProps) => {
 
     return (
         <div className={styles.list} key={list.id}>
-            <button className={styles.delete} onClick={() => deleteList(list.id)}>Delete list</button>
             <h3>{list.name}</h3>
+            <button className={styles.delete} onClick={() => deleteList(list.id)}>Delete list</button>
             {renderTasks(list.Tasks)}
             <ModalWindow
                 show={show}

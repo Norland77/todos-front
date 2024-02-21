@@ -2,7 +2,11 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
-  width: 30%;
+  border: black solid 1px;
+  border-radius: 5px;
+  padding: 10px;
+  flex-grow: 1;
+  height: fit-content;
   > h3 {
     font-size: 26px;
     font-weight: bold;
@@ -25,6 +29,12 @@
   > div {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 15px;
   }
+}
+
+.task_wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }

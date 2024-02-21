@@ -1,8 +1,9 @@
 .lists {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   text-align: center;
-  gap: 10px;
+  column-gap: 10px;
+  row-gap: 30px;
   flex-wrap: wrap;
 }
 
@@ -11,7 +12,7 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
-  > div {
+  &_header {
     display: flex;
     justify-content: center;
     gap: 10px;
@@ -22,6 +23,7 @@
       border: none;
       border-radius: 5px;
       padding: 3px;
+      background-color: darkgray;
     }
     > button {
       width: 15%;

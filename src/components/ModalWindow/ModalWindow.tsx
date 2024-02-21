@@ -36,10 +36,15 @@ const ModalWindow = ({ show, handleClose, title, listId, taskId, updateTodos }: 
         });
         updateTodos();
         handleClose();
+        setFormData({
+            name: '',
+            description: '',
+            priority: ''
+        })
     };
 
     return (
-        <Modal className={styles.modal} fullscreen={"sm-down"} size={"xl"} show={show} onHide={handleClose}>
+        <Modal className={styles.modal} fullscreen={"xxl-down"} size={"xl"} show={show} onHide={handleClose}>
             <Modal.Header>
                 <Modal.Title>
                     Add task for list {title}
