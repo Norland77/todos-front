@@ -1,13 +1,13 @@
-import {IListCreate, IToDos} from "../../interfaces/IToDos.ts";
+import {IListCreate} from "../../interfaces/IToDos.ts";
 import styles from "./lists-pages.module.scss";
 import TaskList from "../../components/TaskList/TaskList.tsx";
-import {ChangeEvent, useEffect, useState} from "react";
-import {todosLoader} from "../../loaders/todosLoader.ts";
-import axios from "axios";
+import {ChangeEvent, useState} from "react";
+import {todoAPI} from "../../services/TodoServices.ts";
 
 const ListsPage = () => {
-    const [todos, setTodos] = useState<IToDos[]>([]);
 
+    const {data: todos, isLoading, error} = todoAPI.useFetchAllTodoQuery('')
+    const [createList, {}] = todoAPI.useCreateListMutation()
     const [formData, setFormData] = useState<IListCreate>({
         name: ''
     });
@@ -20,26 +20,10 @@ const ListsPage = () => {
         }));
     };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const data = await todosLoader();
-            setTodos(data);
-        };
-
-        fetchData();
-    }, []);
-
-    const updateTodos = async () => {
-        const data = await todosLoader();
-        setTodos(data);
-    };
-
     const addList = async () => {
-        await axios.post(`${import.meta.env.VITE_SERVER_URL}/list/create`, {
-            name: formData.name,
-        });
+        event?.preventDefault();
+        await createList({name: formData.name})
 
-        await updateTodos()
         setFormData({
             name: ''
         })
@@ -47,13 +31,15 @@ const ListsPage = () => {
 
     return (
         <div className={styles.body}>
-            <div className={styles.body_header}>
+            <form onSubmit={addList} className={styles.body_header}>
                 <input type="text" name={'name'} value={formData.name} onChange={handleChange}/>
-                <button onClick={addList}>Add new list</button>
-            </div>
+                <input type={"submit"} />
+            </form>
             <div className={styles.lists}>
-                {todos.map((list) => (
-                    <TaskList key={list.id} list={list} updateTodos={updateTodos}/>
+                {isLoading && <h1>Loading....</h1>}
+                {error && <h1>ERROR</h1>}
+                {todos && todos.map((list) => (
+                    <TaskList key={list.id} list={list}/>
                 ))}
             </div>
         </div>

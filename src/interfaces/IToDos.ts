@@ -16,10 +16,13 @@ export interface ITask {
 }
 
 export interface ITaskCreate {
+  id?: string,
   name: string,
   description: string,
   priority: string,
   status?: string
+  listId?: string
+  taskId?: string,
 }
 
 export interface IListCreate {

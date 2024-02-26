@@ -1,8 +1,8 @@
 import { Modal } from "react-bootstrap";
 import { ChangeEvent, useState } from "react";
 import { ITaskCreate } from "../../interfaces/IToDos.ts";
-import axios from "axios";
 import styles from "./modal-windiw.module.scss";
+import {todoAPI} from "../../services/TodoServices.ts";
 
 interface PropsType {
     show: boolean;
@@ -10,10 +10,10 @@ interface PropsType {
     title: string;
     listId: string;
     taskId?: string;
-    updateTodos: () => void;
 }
 
-const ModalWindow = ({ show, handleClose, title, listId, taskId, updateTodos }: PropsType) => {
+const ModalWindow = ({ show, handleClose, title, listId, taskId }: PropsType) => {
+    const [createTask, {}] = todoAPI.useAddTaskMutation()
     const [formData, setFormData] = useState<ITaskCreate>({
         name: '',
         description: '',
@@ -29,12 +29,14 @@ const ModalWindow = ({ show, handleClose, title, listId, taskId, updateTodos }: 
     };
 
     const addTask = async (listId: string, taskId?: string) => {
-        await axios.post(`${import.meta.env.VITE_SERVER_URL}/task/create/${listId}/${taskId ? taskId : ''}`, {
-            name: formData.name,
+        createTask({
+            listId,
+            taskId,
+            priority: formData.priority,
+            status: formData.status,
             description: formData.description,
-            priority: formData.priority
-        });
-        updateTodos();
+            name: formData.name,
+        })
         handleClose();
         setFormData({
             name: '',

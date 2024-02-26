@@ -2,7 +2,7 @@ import styles from "../ModalWindow/modal-windiw.module.scss";
 import {Modal} from "react-bootstrap";
 import {ChangeEvent, useState} from "react";
 import {ITaskCreate} from "../../interfaces/IToDos.ts";
-import axios from "axios";
+import {todoAPI} from "../../services/TodoServices.ts";
 
 interface PropsType {
     show: boolean;
@@ -11,12 +11,11 @@ interface PropsType {
     title: string;
     description?: string;
     priority: string;
-    updateTodos: () => void;
     status: string;
 }
 
-const ModalEdit = ({updateTodos, handleClose, title, show, priority, description, id, status}: PropsType) => {
-
+const ModalEdit = ({handleClose, title, show, priority, description, id, status}: PropsType) => {
+    const [editTask, {}] = todoAPI.useEditTaskMutation()
     const [formData, setFormData] = useState<ITaskCreate>({
         name: title,
         description: description ? description : '',
@@ -32,14 +31,14 @@ const ModalEdit = ({updateTodos, handleClose, title, show, priority, description
         }));
     };
 
-    const editTask = async (id: string) => {
-        await axios.put(`${import.meta.env.VITE_SERVER_URL}/task/edit/${id}`, {
+    const editTaskFunc = async (id: string) => {
+        editTask({
+            id: id,
             name: formData.name,
             description: formData.description,
-            priority: formData.priority,
             status: formData.status,
+            priority: formData.priority,
         });
-        updateTodos();
         handleClose();
     }
 
@@ -69,7 +68,7 @@ const ModalEdit = ({updateTodos, handleClose, title, show, priority, description
                     <option value="Completed">Completed</option>
                     <option value="Cancelled">Cancelled</option>
                 </select>
-                <button onClick={() => editTask(id)}>Edit Task</button>
+                <button onClick={() => editTaskFunc(id)}>Edit Task</button>
             </Modal.Body>
         </Modal>
     );

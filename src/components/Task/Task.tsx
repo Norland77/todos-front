@@ -2,8 +2,8 @@ import styles from "./task.module.scss";
 import {ITask} from "../../interfaces/IToDos.ts";
 import ModalWindow from "../ModalWindow/ModalWindow.tsx";
 import {useState} from "react";
-import axios from "axios";
 import ModalEdit from "../ModalEdit/ModalEdit.tsx";
+import {todoAPI} from "../../services/TodoServices.ts";
 
 interface PropsType {
     task: ITask
@@ -12,10 +12,10 @@ interface PropsType {
     renderSubtasks: (tasks: ITask[]) => JSX.Element | null
     title: string;
     listId: string;
-    updateTodos: () => void;
 }
 
-const Task = ({ task, toggleItem, isItemExpanded, renderSubtasks, listId, title, updateTodos } : PropsType) => {
+const Task = ({ task, toggleItem, isItemExpanded, renderSubtasks, listId, title } : PropsType) => {
+    const [deleteTask, {}] = todoAPI.useDeleteTaskMutation()
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -25,10 +25,9 @@ const Task = ({ task, toggleItem, isItemExpanded, renderSubtasks, listId, title,
     const handleCloseEdit = () => setShowEdit(false);
     const handleShowEdit = () => setShowEdit(true);
 
-    const deleteTask = async (id: string) => {
-        await axios.delete(`${import.meta.env.VITE_SERVER_URL}/task/delete/${id}`);
+    const deleteTaskFunc = async (id: string) => {
+        await deleteTask(id);
 
-        updateTodos()
     }
 
     return (
@@ -39,7 +38,7 @@ const Task = ({ task, toggleItem, isItemExpanded, renderSubtasks, listId, title,
             <p>{task.Status}</p>
             <div className={styles.buttons}>
                 <button onClick={handleShow}>Add Subtask</button>
-                <button onClick={() => deleteTask(task.id)}>Delete Task</button>
+                <button onClick={() => deleteTaskFunc(task.id)}>Delete Task</button>
                 <button onClick={handleShowEdit}>Edit Task</button>
             </div>
             <ModalWindow
@@ -48,7 +47,6 @@ const Task = ({ task, toggleItem, isItemExpanded, renderSubtasks, listId, title,
                 title={title}
                 listId={listId}
                 taskId={task.id}
-                updateTodos={updateTodos}
             />
             <ModalEdit
                 show={showEdit}
@@ -56,7 +54,6 @@ const Task = ({ task, toggleItem, isItemExpanded, renderSubtasks, listId, title,
                 title={task.name}
                 priority={task.Priority}
                 description={task.description}
-                updateTodos={updateTodos}
                 id={task.id}
                 status={task.Status}
             />
